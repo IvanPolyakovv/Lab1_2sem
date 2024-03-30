@@ -1,0 +1,9 @@
+Polyakov Ivan Mikhailovich 1 3372 23 5 3 4 3 4 4 4 4 3.875
+Popov Daniil Sergeevich 1 3374 20 4 4 4 4 4 4 4 4 4
+Volkova Ekaterina Aleksandrovna 0 3371 5 5 5 5 5 5 5 5 5 5
+Matveev Daniil Ilyich 1 3374 15 4 3 3 3 4 3 5 5 3.75
+Zaytsev Ilya Markovich 1 3372 4 4 5 4 4 5 4 5 5 4.5
+Rybakov Maksim Dmitrievich 1 3371 23 3 3 4 3 3 3 5 5 3.625
+Ivanova Maria Olegovna 0 3371 2 3 5 4 5 5 5 4 5 4.5
+Leonov Andrey Igorevich 1 3345 14 5 5 5 5 5 5 5 5 5
+Egorov Igor Denisovich 1 3365 7 4 5 4 4 5 4 5 4 4.375
