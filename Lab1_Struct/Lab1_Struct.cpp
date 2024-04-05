@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include <fstream>
 #include <string>
 #include <stdio.h>
@@ -352,6 +352,7 @@ void allStudents()
             }
             cout << "_____________________________________________\n";
         }
+        delete[] student;
     }
 
 }
@@ -453,6 +454,7 @@ void writeStudentsGroup()
                     temp++;
                 }
             }
+            delete[] student;
         }
     }
 }
@@ -558,6 +560,7 @@ void printTop()
                 cout << "Average: " << student[i].average << '\n';
                 cout << "_________________________________________________________\n";
             }
+            delete[] student;
         }
     }
 }
@@ -607,6 +610,7 @@ void countStudentsSex()
                 }
             }
             cout << "There are " << temp << " students";
+            delete[] student;
         }
     }
 }
@@ -896,6 +900,7 @@ void printScolarship()
                     }
                 }
             }
+            delete[] student;
         }
     }
 }
@@ -997,6 +1002,7 @@ void writeStudentsIdGroup()
                     temp++;
                 }
             }
+            delete[] student;
         }
     }
 }
