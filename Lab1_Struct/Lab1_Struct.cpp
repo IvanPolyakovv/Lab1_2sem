@@ -18,6 +18,20 @@ struct Student
     float average;
 };
 
+struct Abiturient
+{
+    string surname;
+    string name;
+    string patronymic;
+    bool isMale;
+    short age;
+    string city;
+    short examMarks[3];
+    int averageOfExams;
+    bool originalTrue;
+    float averageOfCertificate;
+};
+
 int countStudents()
 {
     ifstream file("students.txt");
@@ -133,29 +147,32 @@ void newStudent()
 
 void rewriteStudent()
 {
-    /*string surname;
-    string name;
-    string patronymic;
-    cout << "Enter the full name of student you want to rewrite: ";
+    string surname, name, patronymic;
+    cout << "Enter the full name (Surname, Name, Patronymic) of the student you want to rewrite: ";
     cin >> surname >> name >> patronymic;
+    ifstream oldFile;
+    oldFile.open("students.txt");
     int count = countStudents();
     Student* student = new Student[count];
-    ifstream file("students.txt");
     for (int i = 0; i < count; i++)
     {
-        file >> student[i].surname >> student[i].name >> student[i].patronymic >> student[i].group >> student[i].id;
+        oldFile >> student[i].surname >> student[i].name >> student[i].patronymic >> student[i].isMale >> student[i].group >> student[i].id;
         for (int j = 0; j < 3; j++)
         {
-            file >> student[i].examsMarks[j];
+            oldFile >> student[i].examsMarks[j];
         }
         for (int j = 0; j < 5; j++)
         {
-            file >> student[i].testsMarks[j];
+            oldFile >> student[i].testsMarks[j];
         }
-        file.close();
-        ofstream file;
-        file.open("newFile.txt");
-        if (student[i].surname == surname && student[i].name == name && student[i].patronymic == patronymic)
+        oldFile >> student[i].average;
+    }
+    oldFile.close();
+    ofstream newFile;
+    newFile.open("newFile.txt");
+    for (int i = 0; i < count; i++)
+    {
+        if ((surname == student[i].surname) && (name == student[i].name) && (patronymic == student[i].patronymic))
         {
             Student newStudent;
             cout << "Enter the new surname: ";
@@ -166,9 +183,9 @@ void rewriteStudent()
             cin >> newStudent.patronymic;
             cout << "If student is male - 1, is female - 0: ";
             cin >> newStudent.isMale;
-            cout << "Enter the new group: ";
+            cout << "Enter the group: ";
             cin >> newStudent.group;
-            cout << "Enter the new number in group: ";
+            cout << "Enter the number in group: ";
             cin >> newStudent.id;
             int temp = 0;
             int sumMarks = 0;
@@ -215,13 +232,13 @@ void rewriteStudent()
                 }
                 cin >> newStudent.testsMarks[j];
                 sumMarks += newStudent.testsMarks[j];
-                if (newStudent.testsMarks[j] == 2)
+                if (newStudent.testsMarks[i] == 2)
                 {
                     temp++;
                 }
             }
             newStudent.average = (float)sumMarks / 8;
-            if (!file.is_open())
+            if (!newFile.is_open())
             {
                 cout << "Error! File is not opened!\n";
             }
@@ -229,18 +246,17 @@ void rewriteStudent()
             {
                 if (temp == 0)
                 {
-                    file << newStudent.surname << ' ' << newStudent.name << ' ' << newStudent.patronymic << ' ' << newStudent.isMale << ' ' << newStudent.group << ' ' << newStudent.id << ' ';
+                    newFile << newStudent.surname << ' ' << newStudent.name << ' ' << newStudent.patronymic << ' ' << newStudent.isMale << ' ' << newStudent.group << ' ' << newStudent.id << ' ';
                     for (int j = 0; j < 3; j++)
                     {
-                        file << newStudent.examsMarks[j] << ' ';
+                        newFile << newStudent.examsMarks[j] << ' ';
                     }
                     for (int j = 0; j < 5; j++)
                     {
-                        file << newStudent.testsMarks[j] << ' ';
+                        newFile << newStudent.testsMarks[j] << ' ';
                     }
-                    file << newStudent.average;
-                    file << "\n";
-                    file.close();
+                    newFile << newStudent.average;
+                    newFile << "\n";
                     cout << "Done!\n";
                 }
                 else
@@ -251,19 +267,23 @@ void rewriteStudent()
         }
         else
         {
-            file << student[i].surname << ' ' << student[i].name << ' ' << student[i].patronymic << ' ' << student[i].isMale << ' ' << student[i].group << ' ' << student[i].id << ' ';
+            newFile << student[i].surname << ' ' << student[i].name << ' ' << student[i].patronymic << ' ' << student[i].isMale << ' ' <<
+                student[i].group << ' ' << student[i].id << ' ';
             for (int j = 0; j < 3; j++)
             {
-                file << student[i].examsMarks[j] << ' ';
+                newFile << student[i].examsMarks[j] << ' ';
             }
             for (int j = 0; j < 5; j++)
             {
-                file << student[i].testsMarks[j] << ' ';
+                newFile << student[i].testsMarks[j] << ' ';
             }
-            file << student[i].average;
-            file << "\n";
+            newFile << student[i].average << endl;
         }
-    }*/
+    }
+    newFile.close();
+    remove("students.txt");
+    rename("newFile.txt", "students.txt");
+    delete[] student;
 }
 
 void menu()
@@ -1007,46 +1027,325 @@ void writeStudentsIdGroup()
     }
 }
 
+void abitMenu()
+{
+    cout << "1. Create new record\n" << "2. Print abiturients under 18 yo\n" << "3. Print abiturients with average of exams from 85\n" << "4. Print abiturients who not from StP\n" <<
+        "5. Print abiturients with 5 average of certificate\n" << "e. Exit\n";
+}
+
+void newAbit()
+{
+    Abiturient abiturient;
+    cout << "Enter the surname: ";
+    cin >> abiturient.surname;
+    cout << "Enter the name: ";
+    cin >> abiturient.name;
+    cout << "Enter the patronymic: ";
+    cin >> abiturient.patronymic;
+    cout << "If student is male - 1, is female - 0: ";
+    cin >> abiturient.isMale;
+    cout << "Enter the age: ";
+    cin >> abiturient.age;
+    cout << "Enter the city: ";
+    cin >> abiturient.city;
+    int sumMarks = 0;
+    for (int i = 0; i < 3; i++)
+    {
+        switch (i)
+        {
+        case 0:
+            cout << "Exam 1: ";
+            break;
+        case 1:
+            cout << "Exam 2: ";
+            break;
+        case 2:
+            cout << "Exam 3: ";
+            break;
+        }
+        cin >> abiturient.examMarks[i];
+        sumMarks += abiturient.examMarks[i];
+    }
+    abiturient.averageOfExams = sumMarks / 3;
+    cout << "If abiturient gave the original of certificate - 1, else - 0: ";
+    cin >> abiturient.originalTrue;
+    cout << "Enter the average of certificate: ";
+    cin >> abiturient.averageOfCertificate;
+    ofstream file;
+    file.open("abiturients.txt", ios::app);
+    if (!file.is_open())
+    {
+        cout << "Error! File is not opened!\n";
+    }
+    else
+    {
+        file << abiturient.surname << ' ' << abiturient.name << ' ' << abiturient.patronymic << ' ' << abiturient.isMale << ' ' <<
+            abiturient.age << ' ' << abiturient.city << ' ' << abiturient.averageOfExams << ' ' << abiturient.originalTrue << ' ' <<
+            abiturient.averageOfCertificate << endl;
+    }
+}
+
+int countAbit()
+{
+    ifstream file("abiturients.txt");
+    if (file.is_open())
+    {
+        int k = 0;
+        string str;
+        while (getline(file, str))
+        {
+            k++;
+        }
+        return k;
+    }
+    file.close();
+}
+
+void abitUnder18()
+{
+    ifstream file;
+    file.open("abiturients.txt");
+    int count = countAbit();
+    Abiturient* abit = new Abiturient[count];
+    for (int i = 0; i < count; i++)
+    {
+        file >> abit[i].surname >> abit[i].name >> abit[i].patronymic >> abit[i].isMale >> abit[i].age >> abit[i].city >>
+            abit[i].averageOfExams >> abit[i].originalTrue >> abit[i].averageOfCertificate;
+    }
+    file.close();
+    for (int i = 0; i < count; i++)
+    {
+        if (abit[i].age < 18)
+        {
+            cout << "______________________________________________________\n";
+            cout << "Full name: " << abit[i].surname << ' ' << abit[i].name << ' ' << abit[i].patronymic << endl;
+            if (abit[i].isMale)
+            {
+                cout << "Sex: Male\n";
+            }
+            else
+            {
+                cout << "Sex: Female\n";
+            }
+            cout << "Age: " << abit[i].age << endl;
+            cout << "City: " << abit[i].city << endl;
+            cout << "Average of exams: " << abit[i].averageOfExams << endl;
+            if (abit[i].originalTrue)
+            {
+                cout << "Original: yes\n";
+            }
+            else
+            {
+                cout << "Original: no\n";
+            }
+            cout << "Average of certificate: " << abit[i].averageOfCertificate << endl;
+            cout << "______________________________________________________\n";
+        }
+    }
+    delete[] abit;
+}
+
+void abitEgeFrom85()
+{
+    ifstream file;
+    file.open("abiturients.txt");
+    int count = countAbit();
+    Abiturient* abit = new Abiturient[count];
+    for (int i = 0; i < count; i++)
+    {
+        file >> abit[i].surname >> abit[i].name >> abit[i].patronymic >> abit[i].isMale >> abit[i].age >> abit[i].city >>
+            abit[i].averageOfExams >> abit[i].originalTrue >> abit[i].averageOfCertificate;
+    }
+    file.close();
+    for (int i = 0; i < count; i++)
+    {
+        if (abit[i].averageOfExams >= 85)
+        {
+            cout << "______________________________________________________\n";
+            cout << "Full name: " << abit[i].surname << ' ' << abit[i].name << ' ' << abit[i].patronymic << endl;
+            if (abit[i].isMale)
+            {
+                cout << "Sex: Male\n";
+            }
+            else
+            {
+                cout << "Sex: Female\n";
+            }
+            cout << "Age: " << abit[i].age << endl;
+            cout << "City: " << abit[i].city << endl;
+            cout << "Average of exams: " << abit[i].averageOfExams << endl;
+            if (abit[i].originalTrue)
+            {
+                cout << "Original: yes\n";
+            }
+            else
+            {
+                cout << "Original: no\n";
+            }
+            cout << "Average of certificate: " << abit[i].averageOfCertificate << endl;
+            cout << "______________________________________________________\n";
+        }
+    }
+    delete[] abit;
+}
+
+void abitNotSpb()
+{
+    ifstream file;
+    file.open("abiturients.txt");
+    int count = countAbit();
+    Abiturient* abit = new Abiturient[count];
+    for (int i = 0; i < count; i++)
+    {
+        file >> abit[i].surname >> abit[i].name >> abit[i].patronymic >> abit[i].isMale >> abit[i].age >> abit[i].city >>
+            abit[i].averageOfExams >> abit[i].originalTrue >> abit[i].averageOfCertificate;
+    }
+    file.close();
+    for (int i = 0; i < count; i++)
+    {
+        if (abit[i].city != "Saint-Petersburg")
+        {
+            cout << "______________________________________________________\n";
+            cout << "Full name: " << abit[i].surname << ' ' << abit[i].name << ' ' << abit[i].patronymic << endl;
+            if (abit[i].isMale)
+            {
+                cout << "Sex: Male\n";
+            }
+            else
+            {
+                cout << "Sex: Female\n";
+            }
+            cout << "Age: " << abit[i].age << endl;
+            cout << "City: " << abit[i].city << endl;
+            cout << "Average of exams: " << abit[i].averageOfExams << endl;
+            if (abit[i].originalTrue)
+            {
+                cout << "Original: yes\n";
+            }
+            else
+            {
+                cout << "Original: no\n";
+            }
+            cout << "Average of certificate: " << abit[i].averageOfCertificate << endl;
+            cout << "______________________________________________________\n";
+        }
+    }
+    delete[] abit;
+}
+
+void abitCert5()
+{
+    ifstream file;
+    file.open("abiturients.txt");
+    int count = countAbit();
+    Abiturient* abit = new Abiturient[count];
+    for (int i = 0; i < count; i++)
+    {
+        file >> abit[i].surname >> abit[i].name >> abit[i].patronymic >> abit[i].isMale >> abit[i].age >> abit[i].city >>
+            abit[i].averageOfExams >> abit[i].originalTrue >> abit[i].averageOfCertificate;
+        if (abit[i].averageOfCertificate == 5)
+        {
+            cout << "______________________________________________________\n";
+            cout << "Full name: " << abit[i].surname << ' ' << abit[i].name << ' ' << abit[i].patronymic << endl;
+            if (abit[i].isMale)
+            {
+                cout << "Sex: Male\n";
+            }
+            else
+            {
+                cout << "Sex: Female\n";
+            }
+            cout << "Age: " << abit[i].age << endl;
+            cout << "City: " << abit[i].city << endl;
+            cout << "Average of exams: " << abit[i].averageOfExams << endl;
+            if (abit[i].originalTrue)
+            {
+                cout << "Original: yes\n";
+            }
+            else
+            {
+                cout << "Original: no\n";
+            }
+            cout << "Average of certificate: " << abit[i].averageOfCertificate << endl;
+            cout << "______________________________________________________\n";
+        }
+    }
+    file.close();
+    delete[] abit;
+}
+
 int main()
 {
     setlocale(0, "");
-    char choice;
+    char choiceStud = '0';
+    char choiceAbit = '0';
     do {
-        menu();
-        cout << "Enter your choice: ";
-        cin >> choice;
-        switch (choice)
+        bool mainChoice;
+        cout << "1 - Students, 0 - Abiturients: ";
+        cin >> mainChoice;
+        if (mainChoice)
         {
-        case '1':
-            newStudent();//новая запись в файл
-            break;
-        case '2':
-            rewriteStudent();//изменение в запись
-            break;
-        case '3':
-            allStudents();//вывод всех
-            break;
-        case '4':
-            writeStudentsGroup();//по группе
-            break;
-        case '5':
-            printTop();//топ
-            break;
-        case '6':
-            countStudentsSex();//по полу
-            break;
-        case '7':
-            printScolarship();//по успеваемости
-            break;
-        case '8':
-            writeStudentsIdGroup();//по номеру в списке
-            break;
-        case 'm':
-            menu();//вывод меню
-            break;
-        case 'e':
-            return 0;//выход
+            menu();
+            cout << "Enter your choice: ";
+            cin >> choiceStud;
+            switch (choiceStud)
+            {
+            case '1':
+                newStudent();//новая запись в файл
+                break;
+            case '2':
+                rewriteStudent();//изменение в запись
+                break;
+            case '3':
+                allStudents();//вывод всех
+                break;
+            case '4':
+                writeStudentsGroup();//по группе
+                break;
+            case '5':
+                printTop();//топ
+                break;
+            case '6':
+                countStudentsSex();//по полу
+                break;
+            case '7':
+                printScolarship();//по успеваемости
+                break;
+            case '8':
+                writeStudentsIdGroup();//по номеру в списке
+                break;
+            case 'm':
+                menu();//вывод меню
+                break;
+            case 'e':
+                return 0;//выход
+            }
         }
-    } while (choice != 'e');
-
+        else
+        {
+            abitMenu();
+            cout << "Enter your choice: ";
+            cin >> choiceAbit;
+            switch (choiceAbit)
+            {
+            case '1':
+                newAbit();
+                break;
+            case '2':
+                abitUnder18();
+                break;
+            case '3':
+                abitEgeFrom85();
+                break;
+            case '4':
+                abitNotSpb();
+                break;
+            case '5':
+                abitCert5();
+                break;
+            case 'e':
+                return 0;
+            }
+        }
+    } while (choiceStud != 'e' || choiceAbit != 'e');
 }
