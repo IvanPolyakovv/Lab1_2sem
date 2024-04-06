@@ -629,7 +629,7 @@ void countStudentsSex()
                     temp++;
                 }
             }
-            cout << "There are " << temp << " students";
+            cout << "There are " << temp << " students\n";
             delete[] student;
         }
     }
